@@ -34,3 +34,21 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+Nama Lengkap: Fadhlyansyah Khair
+Email : fadhlyansyahk13@gmail.com
+Nomor HP : 08179330354
+
+Alur aplikasi :
+
+Buka web → otomatis ke /login
+Belum punya akun? → Klik "Daftar" → isi form → berhasil → ke /login
+Login → masuk ke /tasks
+
+Di halaman /tasks:
+• Lihat semua task kamu (tidak bisa lihat task user lain)
+• Klik "+ Tambah Task" → isi form → simpan
+• Klik badge status (Pending/Done) → otomatis ganti status
+• Klik "Edit" → ubah judul/deskripsi/status
+• Klik "Hapus" → task terhapus
+• Klik "Logout" → keluar dari akun

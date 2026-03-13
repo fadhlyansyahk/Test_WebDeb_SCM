@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panduan Membuat Task Manager</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 14px;
+      color: #1a1a1a;
+      background: #fff;
+      line-height: 1.7;
+      padding: 40px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 28px;
+      color: #1d4ed8;
+      border-bottom: 3px solid #1d4ed8;
+      padding-bottom: 10px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #555;
+      font-size: 13px;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      font-size: 18px;
+      color: #1e3a8a;
+      margin-top: 36px;
+      margin-bottom: 10px;
+      background: #eff6ff;
+      padding: 8px 14px;
+      border-left: 4px solid #1d4ed8;
+      border-radius: 0 6px 6px 0;
+    }
+
+    h3 {
+      font-size: 14px;
+      color: #1e40af;
+      margin-top: 18px;
+      margin-bottom: 6px;
+    }
+
+    p { margin-bottom: 10px; }
+
+    ul, ol {
+      margin-left: 22px;
+      margin-bottom: 10px;
+    }
+
+    li { margin-bottom: 4px; }
+
+    code {
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 13px;
+    }
+
+    pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 16px 20px;
+      border-radius: 8px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 12.5px;
+      line-height: 1.6;
+      overflow-x: auto;
+      margin: 10px 0 16px 0;
+      white-space: pre;
+    }
+
+    .note {
+      background: #fef9c3;
+      border-left: 4px solid #eab308;
+      padding: 10px 14px;
+      border-radius: 0 6px 6px 0;
+      margin: 10px 0;
+      font-size: 13px;
+    }
+
+    .step-badge {
+      display: inline-block;
+      background: #1d4ed8;
+      color: white;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 2px 8px;
+      border-radius: 12px;
+      margin-right: 6px;
+    }
+
+    .section-divider {
+      border: none;
+      border-top: 1px solid #e2e8f0;
+      margin: 30px 0;
+    }
+
+    .structure {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 16px 20px;
+      border-radius: 8px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 12.5px;
+      line-height: 1.8;
+      margin-top: 10px;
+    }
+
+    .flow {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      padding: 16px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.9;
+      margin-top: 10px;
+    }
+
+    @media print {
+      body { padding: 20px; font-size: 12px; }
+      pre { font-size: 11px; }
+      h2 { page-break-before: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Panduan Membuat Aplikasi Task Manager</h1>
+  <p class="subtitle">Ikuti step ini satu per satu dari atas ke bawah. Jangan skip!</p>
+
+  <hr class="section-divider" />
+
+  <!-- PERSIAPAN -->
+  <h2>Persiapan Awal</h2>
+  <p>Pastikan sudah terinstall di komputer kamu:</p>
+  <ul>
+    <li><strong>Node.js</strong> versi 18 ke atas → <code>nodejs.org</code></li>
+    <li><strong>XAMPP</strong> (untuk MySQL) → <code>apachefriends.org</code></li>
+    <li><strong>VS Code</strong></li>
+  </ul>
+
+  <hr class="section-divider" />
+
+  <!-- STEP 1 -->
+  <h2><span class="step-badge">STEP 1</span> Buat Database di MySQL</h2>
+  <ol>
+    <li>Buka <strong>XAMPP</strong> → klik <strong>Start</strong> pada Apache dan MySQL</li>
+    <li>Buka browser → pergi ke <code>http://localhost/phpmyadmin</code></li>
+    <li>Klik <strong>New</strong> di sidebar kiri</li>
+    <li>Isi nama database: <code>taskmanager</code></li>
+    <li>Klik tombol <strong>Create</strong></li>
+  </ol>
+
+  <hr class="section-divider" />
+
+  <!-- STEP 2 -->
+  <h2><span class="step-badge">STEP 2</span> Buat File <code>.env</code></h2>
+  <p>Di dalam folder <code>teswebscm2/</code>, buat file baru bernama <strong>.env</strong> (tanpa ekstensi apapun), lalu isi dengan:</p>
+  <pre>DATABASE_URL="mysql://root:@localhost:3306/taskmanager"
+NEXTAUTH_SECRET="ini-rahasia-boleh-isi-apa-saja"
+NEXTAUTH_URL="http://localhost:3000"</pre>
+  <div class="note">
+    <strong>Catatan:</strong><br/>
+    • <code>root</code> = username MySQL (default XAMPP adalah <code>root</code>)<br/>
+    • Setelah <code>root:</code> adalah password MySQL (default XAMPP kosong, biarkan kosong)<br/>
+    • <code>taskmanager</code> = nama database yang tadi dibuat
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- STEP 3 -->
+  <h2><span class="step-badge">STEP 3</span> Install Package Tambahan</h2>
+  <p>Buka terminal di VS Code (pastikan kamu ada di folder <code>teswebscm2</code>), lalu jalankan:</p>
+  <pre>npm install dotenv</pre>
+
+  <hr class="section-divider" />
+
+  <!-- STEP 4 -->
+  <h2><span class="step-badge">STEP 4</span> Update File Prisma Schema</h2>
+  <p>Buka file <code>prisma/schema.prisma</code>, <strong>hapus semua isinya</strong> dan ganti dengan:</p>
+  <pre>generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  name     String
+  email    String @unique
+  password String
+  tasks    Task[]
+}
+
+model Task {
+  id          Int        @id @default(autoincrement())
+  title       String
+  description String?
+  status      TaskStatus @default(PENDING)
+  userId      Int
+  user        User       @relation(fields: [userId], references: [id])
+  createdAt   DateTime   @default(now())
+}
+
+enum TaskStatus {
+  PENDING
+  DONE
+}</pre>
+
+  <hr class="section-divider" />
+
+  <!-- STEP 5 -->
+  <h2><span class="step-badge">STEP 5</span> Buat Folder <code>lib</code> dan Isinya</h2>
+  <p>Buat folder baru bernama <code>lib</code> di dalam <code>teswebscm2/</code>.</p>
+
+  <h3>Buat file <code>lib/prisma.ts</code></h3>
+  <pre>import { PrismaClient } from "@/app/generated/prisma"
+
+// Supaya tidak buat koneksi baru setiap kali halaman di-refresh
+const globalForPrisma = globalThis as unknown as { prisma: PrismaClient | undefined }
+
+export const prisma = globalForPrisma.prisma ?? new PrismaClient()
+
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma</pre>
+
+  <h3>Buat file <code>lib/auth.ts</code></h3>
+  <pre>import { NextAuthOptions } from "next-auth"
+import CredentialsProvider from "next-auth/providers/credentials"
+import { prisma } from "./prisma"
+import bcrypt from "bcryptjs"
+
+export const authOptions: NextAuthOptions = {
+  providers: [
+    CredentialsProvider({
+      name: "credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) return null
+
+        // Cari user berdasarkan email di database
+        const user = await prisma.user.findUnique({
+          where: { email: credentials.email },
+        })
+
+        if (!user) return null
+
+        // Cocokkan password yang diinput dengan yang ada di database
+        const passwordMatch = await bcrypt.compare(credentials.password, user.password)
+        if (!passwordMatch) return null
+
+        return { id: String(user.id), name: user.name, email: user.email }
+      },
+    }),
+  ],
+  callbacks: {
+    // Simpan id user ke dalam token JWT
+    jwt({ token, user }) {
+      if (user) token.id = user.id
+      return token
+    },
+    // Kirim id user ke session supaya bisa dipakai di halaman
+    session({ session, token }) {
+      if (session.user) session.user.id = token.id as string
+      return session
+    },
+  },
+  pages: {
+    signIn: "/login", // Redirect ke halaman login custom kita
+  },
+  session: {
+    strategy: "jwt",
+  },
+}</pre>
+
+  <hr class="section-divider" />
+
+  <!-- STEP 6 -->
+  <h2><span class="step-badge">STEP 6</span> Buat Folder <code>types</code> dan Isinya</h2>
+  <p>Buat folder baru bernama <code>types</code> di dalam <code>teswebscm2/</code>.</p>
+
+  <h3>Buat file <code>types/next-auth.d.ts</code></h3>
+  <p>File ini menambah field <code>id</code> ke tipe session bawaan NextAuth.</p>
+  <pre>import "next-auth"
+import "next-auth/jwt"
+
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string
+      name?: string | null
+      email?: string | null
+    }
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    id: string
+  }
+}</pre>
+
+  <hr class="section-divider" />
+
+  <!-- STEP 7 -->
+  <h2><span class="step-badge">STEP 7</span> Buat API Routes</h2>
+  <p>Buat folder <code>api/</code> di dalam <code>app/</code>.</p>
+
+  <h3>7a. Buat <code>app/api/auth/[...nextauth]/route.ts</code></h3>
+  <p>Buat folder bertingkat: <code>api</code> → <code>auth</code> → <code>[...nextauth]</code></p>
+  <pre>import NextAuth from "next-auth"
+import { authOptions } from "@/lib/auth"
+
+// Handler untuk semua request login/logout dari NextAuth
+const handler = NextAuth(authOptions)
+export { handler as GET, handler as POST }</pre>
+
+  <h3>7b. Buat <code>app/api/register/route.ts</code></h3>
+  <pre>import { prisma } from "@/lib/prisma"
+import bcrypt from "bcryptjs"
+
+export async function POST(req: Request) {
+  const { name, email, password } = await req.json()
+
+  // Cek apakah email sudah pernah dipakai
+  const existingUser = await prisma.user.findUnique({ where: { email } })
+  if (existingUser) {
+    return Response.json({ error: "Email sudah terdaftar" }, { status: 400 })
+  }
+
+  // Enkripsi password sebelum disimpan ke database
+  const hashedPassword = await bcrypt.hash(password, 10)
+
+  await prisma.user.create({
+    data: { name, email, password: hashedPassword },
+  })
+
+  return Response.json({ message: "Registrasi berhasil" })
+}</pre>
+
+  <h3>7c. Buat <code>app/api/tasks/route.ts</code></h3>
+  <pre>import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/auth"
+import { prisma } from "@/lib/prisma"
+
+// GET: Ambil semua task milik user yang sedang login
+export async function GET() {
+  const session = await getServerSession(authOptions)
+  if (!session) return Response.json({ error: "Belum login" }, { status: 401 })
+
+  const tasks = await prisma.task.findMany({
+    where: { userId: Number(session.user.id) }, // Hanya task milik user ini
+    orderBy: { createdAt: "desc" },
+  })
+
+  return Response.json(tasks)
+}
+
+// POST: Tambah task baru
+export async function POST(req: Request) {
+  const session = await getServerSession(authOptions)
+  if (!session) return Response.json({ error: "Belum login" }, { status: 401 })
+
+  const { title, description } = await req.json()
+
+  const task = await prisma.task.create({
+    data: {
+      title,
+      description,
+      userId: Number(session.user.id), // Dikaitkan ke user yang login
+    },
+  })
+
+  return Response.json(task)
+}</pre>
+
+  <h3>7d. Buat <code>app/api/tasks/[id]/route.ts</code></h3>
+  <pre>import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/auth"
+import { prisma } from "@/lib/prisma"
+
+// GET: Ambil satu task (untuk halaman edit)
+export async function GET(
+  req: Request,
+  { params }: { params: Promise&lt;{ id: string }&gt; }
+) {
+  const session = await getServerSession(authOptions)
+  if (!session) return Response.json({ error: "Belum login" }, { status: 401 })
+
+  const { id } = await params
+
+  // Pastikan task ini milik user yang login (bukan milik orang lain)
+  const task = await prisma.task.findFirst({
+    where: { id: Number(id), userId: Number(session.user.id) },
+  })
+
+  if (!task) return Response.json({ error: "Task tidak ditemukan" }, { status: 404 })
+
+  return Response.json(task)
+}
+
+// PUT: Edit task
+export async function PUT(
+  req: Request,
+  { params }: { params: Promise&lt;{ id: string }&gt; }
+) {
+  const session = await getServerSession(authOptions)
+  if (!session) return Response.json({ error: "Belum login" }, { status: 401 })
+
+  const { id } = await params
+  const { title, description, status } = await req.json()
+
+  // Pastikan task ini milik user yang login
+  const task = await prisma.task.findFirst({
+    where: { id: Number(id), userId: Number(session.user.id) },
+  })
+
+  if (!task) return Response.json({ error: "Task tidak ditemukan" }, { status: 404 })
+
+  const updated = await prisma.task.update({
+    where: { id: Number(id) },
+    data: { title, description, status },
+  })
+
+  return Response.json(updated)
+}
+
+// DELETE: Hapus task
+export async function DELETE(
+  req: Request,
+  { params }: { params: Promise&lt;{ id: string }&gt; }
+) {
+  const session = await getServerSession(authOptions)
+  if (!session) return Response.json({ error: "Belum login" }, { status: 401 })
+
+  const { id } = await params
+
+  // Pastikan task ini milik user yang login
+  const task = await prisma.task.findFirst({
+    where: { id: Number(id), userId: Number(session.user.id) },
+  })
+
+  if (!task) return Response.json({ error: "Task tidak ditemukan" }, { status: 404 })
+
+  await prisma.task.delete({ where: { id: Number(id) } })
+
+  return Response.json({ message: "Task berhasil dihapus" })
+}</pre>
+
+  <hr class="section-divider" />
+
+  <!-- STEP 8 -->
+  <h2><span class="step-badge">STEP 8</span> Buat <code>app/providers.tsx</code></h2>
+  <pre>"use client"
+
+import { SessionProvider } from "next-auth/react"
+
+// Bungkus app supaya semua halaman bisa cek siapa yang sedang login
+export default function Providers({ children }: { children: React.ReactNode }) {
+  return &lt;SessionProvider&gt;{children}&lt;/SessionProvider&gt;
+}</pre>
+
+  <hr class="section-divider" />
+
+  <!-- STEP 9 -->
+  <h2><span class="step-badge">STEP 9</span> Update <code>app/layout.tsx</code></h2>
+  <p><strong>Hapus semua isi</strong> file <code>app/layout.tsx</code> dan ganti dengan:</p>
+  <pre>import type { Metadata } from "next"
+import "./globals.css"
+import Providers from "./providers"
+
+export const metadata: Metadata = {
+  title: "Task Manager",
+  description: "Aplikasi manajemen task pribadi",
+}
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    &lt;html lang="id"&gt;
+      &lt;body&gt;
+        &lt;Providers&gt;{children}&lt;/Providers&gt;
+      &lt;/body&gt;
+    &lt;/html&gt;
+  )
+}</pre>
+
+  <hr class="section-divider" />
+
+  <!-- STEP 10 -->
+  <h2><span class="step-badge">STEP 10</span> Update <code>app/page.tsx</code></h2>
+  <p><strong>Hapus semua isi</strong> file <code>app/page.tsx</code> dan ganti dengan:</p>
+  <pre>import { redirect } from "next/navigation"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/auth"
+
+export default async function Home() {
+  const session = await getServerSession(authOptions)
+  // Kalau sudah login → langsung ke halaman tasks
+  // Kalau belum login → ke halaman login
+  if (session) redirect("/tasks")
+  redirect("/login")
+}</pre>
+
+  <hr class="section-divider" />
+
+  <!-- STEP 11 -->
+  <h2><span class="step-badge">STEP 11</span> Buat <code>middleware.ts</code></h2>
+  <p>Di folder utama <code>teswebscm2/</code>, buat file <code>middleware.ts</code>:</p>
+  <pre>export { default } from "next-auth/middleware"
+
+// Halaman /tasks dan semua sub-halamannya butuh login
+export const config = {
+  matcher: ["/tasks/:path*"],
+}</pre>
+
+  <hr class="section-divider" />
+
+  <!-- STEP 12 -->
+  <h2><span class="step-badge">STEP 12</span> Buat Halaman Login</h2>
+  <p>Buat folder <code>app/login/</code>, lalu buat file <code>app/login/page.tsx</code>:</p>
+  <pre>"use client"
+
+import { signIn } from "next-auth/react"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import Link from "next/link"
+
+export default function LoginPage() {
+  const router = useRouter()
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setError("")
+
+    const result = await signIn("credentials", {
+      email,
+      password,
+      redirect: false, // Kita handle redirect manual
+    })
+
+    if (result?.error) {
+      setError("Email atau password salah")
+    } else {
+      router.push("/tasks") // Berhasil login → ke halaman tasks
+    }
+  }
+
+  return (
+    &lt;div className="min-h-screen flex items-center justify-center bg-gray-100"&gt;
+      &lt;div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md"&gt;
+        &lt;h1 className="text-2xl font-bold text-center mb-6"&gt;Login&lt;/h1&gt;
+
+        {error &amp;&amp; (
+          &lt;p className="bg-red-100 text-red-600 p-3 rounded mb-4 text-sm"&gt;{error}&lt;/p&gt;
+        )}
+
+        &lt;form onSubmit={handleSubmit} className="space-y-4"&gt;
+          &lt;div&gt;
+            &lt;label className="block text-sm font-medium mb-1"&gt;Email&lt;/label&gt;
+            &lt;input
+              type="email"
+              value={email}
+              onChange={(e) =&gt; setEmail(e.target.value)}
+              className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            /&gt;
+          &lt;/div&gt;
+          &lt;div&gt;
+            &lt;label className="block text-sm font-medium mb-1"&gt;Password&lt;/label&gt;
+            &lt;input
+              type="password"
+              value={password}
+              onChange={(e) =&gt; setPassword(e.target.value)}
+              className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            /&gt;
+          &lt;/div&gt;
+          &lt;button
+            type="submit"
+            className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 font-medium"
+          &gt;
+            Login
+          &lt;/button&gt;
+        &lt;/form&gt;
+
+        &lt;p className="text-center mt-4 text-sm text-gray-600"&gt;
+          Belum punya akun?{" "}
+          &lt;Link href="/register" className="text-blue-500 hover:underline"&gt;
+            Daftar di sini
+          &lt;/Link&gt;
+        &lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  )
+}</pre>
+
+  <hr class="section-divider" />
+
+  <!-- STEP 13 -->
+  <h2><span class="step-badge">STEP 13</span> Buat Halaman Register</h2>
+  <p>Buat folder <code>app/register/</code>, lalu buat file <code>app/register/page.tsx</code>:</p>
+  <pre>"use client"
+
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import Link from "next/link"
+
+export default function RegisterPage() {
+  const router = useRouter()
+  const [form, setForm] = useState({ name: "", email: "", password: "" })
+  const [error, setError] = useState("")
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setError("")
+
+    const res = await fetch("/api/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+    })
+
+    const data = await res.json()
+
+    if (!res.ok) {
+      setError(data.error)
+    } else {
+      router.push("/login") // Berhasil daftar → ke login
+    }
+  }
+
+  return (
+    &lt;div className="min-h-screen flex items-center justify-center bg-gray-100"&gt;
+      &lt;div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md"&gt;
+        &lt;h1 className="text-2xl font-bold text-center mb-6"&gt;Daftar Akun&lt;/h1&gt;
+
+        {error &amp;&amp; (
+          &lt;p className="bg-red-100 text-red-600 p-3 rounded mb-4 text-sm"&gt;{error}&lt;/p&gt;
+        )}
+
+        &lt;form onSubmit={handleSubmit} className="space-y-4"&gt;
+          &lt;div&gt;
+            &lt;label className="block text-sm font-medium mb-1"&gt;Nama&lt;/label&gt;
+            &lt;input
+              type="text"
+              value={form.name}
+              onChange={(e) =&gt; setForm({ ...form, name: e.target.value })}
+              className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            /&gt;
+          &lt;/div&gt;
+          &lt;div&gt;
+            &lt;label className="block text-sm font-medium mb-1"&gt;Email&lt;/label&gt;
+            &lt;input
+              type="email"
+              value={form.email}
+              onChange={(e) =&gt; setForm({ ...form, email: e.target.value })}
+              className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            /&gt;
+          &lt;/div&gt;
+          &lt;div&gt;
+            &lt;label className="block text-sm font-medium mb-1"&gt;Password&lt;/label&gt;
+            &lt;input
+              type="password"
+              value={form.password}
+              onChange={(e) =&gt; setForm({ ...form, password: e.target.value })}
+              className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            /&gt;
+          &lt;/div&gt;
+          &lt;button
+            type="submit"
+            className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 font-medium"
+          &gt;
+            Daftar
+          &lt;/button&gt;
+        &lt;/form&gt;
+
+        &lt;p className="text-center mt-4 text-sm text-gray-600"&gt;
+          Sudah punya akun?{" "}
+          &lt;Link href="/login" className="text-blue-500 hover:underline"&gt;
+            Login di sini
+          &lt;/Link&gt;
+        &lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  )
+}</pre>
+
+  <hr class="section-divider" />
+
+  <!-- STEP 14 -->
+  <h2><span class="step-badge">STEP 14</span> Buat Halaman Daftar Task</h2>
+  <p>Buat folder <code>app/tasks/</code>, lalu buat file <code>app/tasks/page.tsx</code>:</p>
+  <pre>"use client"
+
+import { useSession, signOut } from "next-auth/react"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
+
+// Tipe data untuk task
+type Task = {
+  id: number
+  title: string
+  description: string | null
+  status: "PENDING" | "DONE"
+}
+
+export default function TasksPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const [tasks, setTasks] = useState&lt;Task[]&gt;([])
+
+  useEffect(() =&gt; {
+    if (status === "unauthenticated") router.push("/login")
+    if (status === "authenticated") fetchTasks()
+  }, [status])
+
+  // Ambil daftar task dari API
+  async function fetchTasks() {
+    const res = await fetch("/api/tasks")
+    const data = await res.json()
+    setTasks(data)
+  }
+
+  // Hapus task
+  async function deleteTask(id: number) {
+    if (!confirm("Yakin ingin menghapus task ini?")) return
+    await fetch(`/api/tasks/${id}`, { method: "DELETE" })
+    fetchTasks() // Refresh daftar
+  }
+
+  // Ganti status PENDING ↔ DONE
+  async function toggleStatus(task: Task) {
+    const newStatus = task.status === "PENDING" ? "DONE" : "PENDING"
+    await fetch(`/api/tasks/${task.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...task, status: newStatus }),
+    })
+    fetchTasks() // Refresh daftar
+  }
+
+  if (status === "loading") return &lt;p className="text-center mt-10"&gt;Loading...&lt;/p&gt;
+
+  return (
+    &lt;div className="min-h-screen bg-gray-100"&gt;
+      {/* Navbar */}
+      &lt;header className="bg-white shadow-sm"&gt;
+        &lt;div className="max-w-3xl mx-auto px-4 py-4 flex justify-between items-center"&gt;
+          &lt;h1 className="text-xl font-bold"&gt;Task Manager&lt;/h1&gt;
+          &lt;div className="flex items-center gap-4"&gt;
+            &lt;span className="text-sm text-gray-600"&gt;Halo, {session?.user?.name}&lt;/span&gt;
+            &lt;button
+              onClick={() =&gt; signOut({ callbackUrl: "/login" })}
+              className="text-sm text-red-500 hover:underline"
+            &gt;
+              Logout
+            &lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/header&gt;
+
+      {/* Isi halaman */}
+      &lt;main className="max-w-3xl mx-auto px-4 py-8"&gt;
+        &lt;div className="flex justify-between items-center mb-6"&gt;
+          &lt;h2 className="text-lg font-semibold"&gt;Task Saya&lt;/h2&gt;
+          &lt;button
+            onClick={() =&gt; router.push("/tasks/new")}
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 text-sm"
+          &gt;
+            + Tambah Task
+          &lt;/button&gt;
+        &lt;/div&gt;
+
+        {tasks.length === 0 ? (
+          &lt;p className="text-center text-gray-400 py-12"&gt;
+            Belum ada task. Klik tombol di atas untuk menambah!
+          &lt;/p&gt;
+        ) : (
+          &lt;div className="space-y-3"&gt;
+            {tasks.map((task) =&gt; (
+              &lt;div
+                key={task.id}
+                className="bg-white rounded-lg shadow-sm p-4 flex justify-between items-start"
+              &gt;
+                &lt;div className="flex-1"&gt;
+                  {/* Judul task, coret kalau sudah Done */}
+                  &lt;p className={`font-medium ${task.status === "DONE" ? "line-through text-gray-400" : ""}`}&gt;
+                    {task.title}
+                  &lt;/p&gt;
+                  {task.description &amp;&amp; (
+                    &lt;p className="text-sm text-gray-500 mt-1"&gt;{task.description}&lt;/p&gt;
+                  )}
+                  {/* Tombol ganti status */}
+                  &lt;button
+                    onClick={() =&gt; toggleStatus(task)}
+                    className={`mt-2 text-xs px-2 py-1 rounded-full font-medium ${
+                      task.status === "DONE"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-yellow-100 text-yellow-700"
+                    }`}
+                  &gt;
+                    {task.status === "DONE" ? "✓ Done" : "⏳ Pending"}
+                  &lt;/button&gt;
+                &lt;/div&gt;
+                &lt;div className="flex gap-3 ml-4"&gt;
+                  &lt;button
+                    onClick={() =&gt; router.push(`/tasks/${task.id}/edit`)}
+                    className="text-sm text-blue-500 hover:underline"
+                  &gt;
+                    Edit
+                  &lt;/button&gt;
+                  &lt;button
+                    onClick={() =&gt; deleteTask(task.id)}
+                    className="text-sm text-red-500 hover:underline"
+                  &gt;
+                    Hapus
+                  &lt;/button&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+            ))}
+          &lt;/div&gt;
+        )}
+      &lt;/main&gt;
+    &lt;/div&gt;
+  )
+}</pre>
+
+  <hr class="section-divider" />
+
+  <!-- STEP 15 -->
+  <h2><span class="step-badge">STEP 15</span> Buat Halaman Tambah Task</h2>
+  <p>Buat folder <code>app/tasks/new/</code>, lalu buat file <code>app/tasks/new/page.tsx</code>:</p>
+  <pre>"use client"
+
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+
+export default function NewTaskPage() {
+  const router = useRouter()
+  const [title, setTitle] = useState("")
+  const [description, setDescription] = useState("")
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+
+    // Kirim task baru ke API
+    await fetch("/api/tasks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title, description }),
+    })
+
+    router.push("/tasks") // Kembali ke daftar task
+  }
+
+  return (
+    &lt;div className="min-h-screen bg-gray-100 flex items-center justify-center"&gt;
+      &lt;div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md"&gt;
+        &lt;h1 className="text-2xl font-bold mb-6"&gt;Tambah Task&lt;/h1&gt;
+
+        &lt;form onSubmit={handleSubmit} className="space-y-4"&gt;
+          &lt;div&gt;
+            &lt;label className="block text-sm font-medium mb-1"&gt;Judul Task&lt;/label&gt;
+            &lt;input
+              type="text"
+              value={title}
+              onChange={(e) =&gt; setTitle(e.target.value)}
+              className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="contoh: Belajar React"
+              required
+            /&gt;
+          &lt;/div&gt;
+          &lt;div&gt;
+            &lt;label className="block text-sm font-medium mb-1"&gt;
+              Deskripsi &lt;span className="text-gray-400"&gt;(opsional)&lt;/span&gt;
+            &lt;/label&gt;
+            &lt;textarea
+              value={description}
+              onChange={(e) =&gt; setDescription(e.target.value)}
+              className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              rows={3}
+              placeholder="contoh: Pelajari hooks dan state management"
+            /&gt;
+          &lt;/div&gt;
+          &lt;div className="flex gap-3"&gt;
+            &lt;button
+              type="submit"
+              className="flex-1 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 font-medium"
+            &gt;
+              Simpan
+            &lt;/button&gt;
+            &lt;button
+              type="button"
+              onClick={() =&gt; router.back()}
+              className="flex-1 border py-2 rounded-lg hover:bg-gray-50"
+            &gt;
+              Batal
+            &lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/form&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  )
+}</pre>
+
+  <hr class="section-divider" />
+
+  <!-- STEP 16 -->
+  <h2><span class="step-badge">STEP 16</span> Buat Halaman Edit Task</h2>
+  <p>Buat folder <code>app/tasks/[id]/edit/</code>, lalu buat file <code>app/tasks/[id]/edit/page.tsx</code>:</p>
+  <pre>"use client"
+
+import { useRouter, useParams } from "next/navigation"
+import { useEffect, useState } from "react"
+
+export default function EditTaskPage() {
+  const router = useRouter()
+  const { id } = useParams() // Ambil id dari URL
+  const [title, setTitle] = useState("")
+  const [description, setDescription] = useState("")
+  const [status, setStatus] = useState("PENDING")
+
+  // Saat halaman dibuka, ambil data task yang mau diedit
+  useEffect(() =&gt; {
+    async function loadTask() {
+      const res = await fetch(`/api/tasks/${id}`)
+      const task = await res.json()
+      setTitle(task.title)
+      setDescription(task.description ?? "")
+      setStatus(task.status)
+    }
+    if (id) loadTask()
+  }, [id])
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+
+    // Kirim perubahan ke API
+    await fetch(`/api/tasks/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title, description, status }),
+    })
+
+    router.push("/tasks") // Kembali ke daftar task
+  }
+
+  return (
+    &lt;div className="min-h-screen bg-gray-100 flex items-center justify-center"&gt;
+      &lt;div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md"&gt;
+        &lt;h1 className="text-2xl font-bold mb-6"&gt;Edit Task&lt;/h1&gt;
+
+        &lt;form onSubmit={handleSubmit} className="space-y-4"&gt;
+          &lt;div&gt;
+            &lt;label className="block text-sm font-medium mb-1"&gt;Judul Task&lt;/label&gt;
+            &lt;input
+              type="text"
+              value={title}
+              onChange={(e) =&gt; setTitle(e.target.value)}
+              className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            /&gt;
+          &lt;/div&gt;
+          &lt;div&gt;
+            &lt;label className="block text-sm font-medium mb-1"&gt;
+              Deskripsi &lt;span className="text-gray-400"&gt;(opsional)&lt;/span&gt;
+            &lt;/label&gt;
+            &lt;textarea
+              value={description}
+              onChange={(e) =&gt; setDescription(e.target.value)}
+              className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              rows={3}
+            /&gt;
+          &lt;/div&gt;
+          &lt;div&gt;
+            &lt;label className="block text-sm font-medium mb-1"&gt;Status&lt;/label&gt;
+            &lt;select
+              value={status}
+              onChange={(e) =&gt; setStatus(e.target.value)}
+              className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            &gt;
+              &lt;option value="PENDING"&gt;Pending&lt;/option&gt;
+              &lt;option value="DONE"&gt;Done&lt;/option&gt;
+            &lt;/select&gt;
+          &lt;/div&gt;
+          &lt;div className="flex gap-3"&gt;
+            &lt;button
+              type="submit"
+              className="flex-1 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 font-medium"
+            &gt;
+              Simpan
+            &lt;/button&gt;
+            &lt;button
+              type="button"
+              onClick={() =&gt; router.back()}
+              className="flex-1 border py-2 rounded-lg hover:bg-gray-50"
+            &gt;
+              Batal
+            &lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/form&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  )
+}</pre>
+
+  <hr class="section-divider" />
+
+  <!-- STEP 17 -->
+  <h2><span class="step-badge">STEP 17</span> Jalankan Migrasi Database</h2>
+  <p>Di terminal VS Code, jalankan perintah berikut:</p>
+  <pre>npx prisma migrate dev --name init</pre>
+  <div class="note">
+    <strong>Perintah ini akan:</strong><br/>
+    1. Membuat tabel <code>User</code> dan <code>Task</code> di database MySQL kamu<br/>
+    2. Generate Prisma Client yang dipakai di kode<br/><br/>
+    Kalau berhasil, akan muncul tulisan: <strong>Your database is now in sync with your schema.</strong>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- STEP 18 -->
+  <h2><span class="step-badge">STEP 18</span> Jalankan Aplikasi</h2>
+  <pre>npm run dev</pre>
+  <p>Buka browser → pergi ke <code>http://localhost:3000</code></p>
+
+  <hr class="section-divider" />
+
+  <!-- HASIL AKHIR -->
+  <h2>Hasil Akhir — Alur Aplikasi</h2>
+  <div class="flow">
+    Buka web → otomatis ke /login<br/>
+    Belum punya akun? → Klik "Daftar" → isi form → berhasil → ke /login<br/>
+    Login → masuk ke /tasks<br/>
+    <br/>
+    Di halaman /tasks:<br/>
+    &nbsp;&nbsp;• Lihat semua task kamu (tidak bisa lihat task user lain)<br/>
+    &nbsp;&nbsp;• Klik "+ Tambah Task" → isi form → simpan<br/>
+    &nbsp;&nbsp;• Klik badge status (Pending/Done) → otomatis ganti status<br/>
+    &nbsp;&nbsp;• Klik "Edit" → ubah judul/deskripsi/status<br/>
+    &nbsp;&nbsp;• Klik "Hapus" → task terhapus<br/>
+    &nbsp;&nbsp;• Klik "Logout" → keluar dari akun
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- STRUKTUR FOLDER -->
+  <h2>Struktur Folder Akhir</h2>
+  <div class="structure">
+teswebscm2/<br/>
+├── app/<br/>
+│&nbsp;&nbsp; ├── api/<br/>
+│&nbsp;&nbsp; │&nbsp;&nbsp; ├── auth/[...nextauth]/route.ts<br/>
+│&nbsp;&nbsp; │&nbsp;&nbsp; ├── register/route.ts<br/>
+│&nbsp;&nbsp; │&nbsp;&nbsp; └── tasks/<br/>
+│&nbsp;&nbsp; │&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; ├── route.ts<br/>
+│&nbsp;&nbsp; │&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; └── [id]/route.ts<br/>
+│&nbsp;&nbsp; ├── login/page.tsx<br/>
+│&nbsp;&nbsp; ├── register/page.tsx<br/>
+│&nbsp;&nbsp; ├── tasks/<br/>
+│&nbsp;&nbsp; │&nbsp;&nbsp; ├── page.tsx<br/>
+│&nbsp;&nbsp; │&nbsp;&nbsp; ├── new/page.tsx<br/>
+│&nbsp;&nbsp; │&nbsp;&nbsp; └── [id]/edit/page.tsx<br/>
+│&nbsp;&nbsp; ├── layout.tsx<br/>
+│&nbsp;&nbsp; ├── page.tsx<br/>
+│&nbsp;&nbsp; └── providers.tsx<br/>
+├── lib/<br/>
+│&nbsp;&nbsp; ├── prisma.ts<br/>
+│&nbsp;&nbsp; └── auth.ts<br/>
+├── types/<br/>
+│&nbsp;&nbsp; └── next-auth.d.ts<br/>
+├── prisma/<br/>
+│&nbsp;&nbsp; └── schema.prisma<br/>
+├── middleware.ts<br/>
+└── .env
+  </div>
+
+</body>
+</html>
